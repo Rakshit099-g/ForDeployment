@@ -16,6 +16,6 @@ echo "Copying React build into Spring Boot static folder..."
 rm -rf spring-boot-server/src/main/resources/static/*
 cp -r react-client/dist/* spring-boot-server/src/main/resources/static/
 
-echo "Starting Spring Boot backend with embedded React frontend..."
+echo "Starting Spring Boot backend (with embedded React frontend)..."
 cd spring-boot-server
 java -jar target/*.jar --server.port=$PORT
