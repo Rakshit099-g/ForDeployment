@@ -1,31 +1,22 @@
 #!/bin/bash
-
-# Exit on error
 set -e
 
 echo "Building Spring Boot backend..."
 cd spring-boot-server
-
-# Build backend (skip tests for faster deploy)
+chmod +x mvnw
 ./mvnw clean package -DskipTests
-
-# Go back to root
 cd ..
 
 echo "Building React frontend..."
 cd react-client
-
-# Install dependencies and build
 npm install
 npm run build
-
-# Move frontend build to Spring Boot static folder
 cd ..
+
+echo "Copying React build into Spring Boot static folder..."
 rm -rf spring-boot-server/src/main/resources/static/*
-cp -r react-client/build/* spring-boot-server/src/main/resources/static/
+cp -r react-client/dist/* spring-boot-server/src/main/resources/static/
 
-echo "Starting Spring Boot server..."
+echo "Starting Spring Boot backend with embedded React frontend..."
 cd spring-boot-server
-
-# Run backend
-java -jar target/spring-boot-0.0.1-SNAPSHOT.jar
+java -jar target/*.jar
